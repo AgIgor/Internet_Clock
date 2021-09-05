@@ -6,7 +6,7 @@
   #include <Adafruit_NeoPixel.h>
 
   Adafruit_NeoPixel pixels (24, 1, NEO_GRB + NEO_KHZ800);
-    
+
   BH1750 lightMeter;
 
   int lux,
