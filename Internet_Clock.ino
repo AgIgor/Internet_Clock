@@ -10,7 +10,7 @@
   BH1750 lightMeter;
 
   int lux,
-      luxMax = 10,// MAX PARA AUMENTAR BRILHO
+      luxMax = 7,// MAX PARA AUMENTAR BRILHO
       luxMin = 5;// MIN PARA DIMINUIR BRILHO
 
   const char *ssid     = "VIVOFIBRA-9501";
@@ -23,7 +23,8 @@
   WiFiUDP ntpUDP;
   NTPClient timeClient(ntpUDP, "south-america.pool.ntp.org", utcOffsetInSeconds,60000);
 
-  int Segundo;
+  int Segundo,
+      newSegundo;
   int
     Minuto,
     newMinuto,
@@ -98,36 +99,21 @@ void setup(){
 }//END SETUP
 //===============================================//
 void loop() {
+  /*
     if(millis() - pontoMillis >= 1000){
       pontoMillis = millis();
       piscaPonto();
     }
+    */
     ntpClock();
-    delay(1);
+    display();
+    delay(50);
 
-
- /*   pontoMillis = millis();
-      contSeg ++;
+    if(newSegundo != Segundo){
+      newSegundo = Segundo;
       piscaPonto();
       luxRead();
-
-      if(contSeg >= 60){
-        contSeg = 0;
-        contMin ++;
-        ntpClock();
-
-        if(contMin >= 60){
-          contMin = 0;
-          contHor ++;
-            if(contHor >= 24){
-              contHor = 0;
-              ESP.restart();
-            }
-          }
-        }
-    }
-    display();*/
-
+    }//END NEW SGUNDO
 //===============================================//
 }//END LOOP
 void ntpClock(){
@@ -135,14 +121,10 @@ void ntpClock(){
         Hora = (timeClient.getHours());
         Minuto = (timeClient.getMinutes());
         Segundo = (timeClient.getSeconds());
+
         if(newMinuto != Minuto){
           newMinuto = Minuto;
-          if(Hora >= 23 and Segundo >= 59){
-            ESP.restart();
-          }
           trataDigitos();
-          luxRead();
-          display();
         }//END NEW MINUTO
 }//END NTP CLOCK
 //===============================================//
